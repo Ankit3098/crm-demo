@@ -21,9 +21,9 @@ const AddUserModal = (props) => {
             <FormGroup>
               <Label htmlFor="name">Name</Label>
               <Input
-                value={props.inputUser.username}
+                value={props.inputUser.naem}
                 type="name"
-                name="username"
+                name="name"
                 id="name"
                 placeholder="Enter User Name"
                 onChange={props.handleChange}

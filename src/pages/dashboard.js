@@ -7,7 +7,7 @@ const Dashboard = () => {
   const [modal, setModal] = useState(false);
   const [inputUser, setInputUser] = useState({
     id: Math.ceil(Math.random() * 1000),
-    username: "",
+    name: "",
     email: "",
   });
   // get the data from local json file
