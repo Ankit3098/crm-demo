@@ -7,7 +7,7 @@ const UserCard = (props) => {
     <>
       <Card>
         <CardBody>
-          <CardTitle tag="h5">{props.user.username}</CardTitle>
+          <CardTitle tag="h5">{props.user.name}</CardTitle>
           <CardText>{props.user.email}</CardText>
           {props.handleDelete && (
             <Button

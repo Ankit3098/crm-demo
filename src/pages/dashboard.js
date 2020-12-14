@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Button } from "reactstrap";
 import AddUserModal from "../components/AddUserModal";
 import Users from "../components/Users";
-import data from "../data/mockData.json";
 const Dashboard = () => {
   const [users, setUsers] = useState([]);
   const [modal, setModal] = useState(false);
@@ -13,7 +12,12 @@ const Dashboard = () => {
   });
   // get the data from local json file
   useEffect(() => {
-    setUsers(data);
+    const fetchData = () => {
+      fetch("https://jsonplaceholder.typicode.com/users")
+        .then((response) => response.json())
+        .then((json) => setUsers(json));
+    };
+    fetchData();
   }, []);
   // update the state
   const handleChange = (e) => {

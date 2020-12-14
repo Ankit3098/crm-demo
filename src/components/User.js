@@ -1,15 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import data from "../data/mockData.json";
 import UserCard from "./UserCard";
 
 const User = () => {
   const [users, setUsers] = useState([]);
   const { id } = useParams();
   useEffect(() => {
-    setUsers(data);
-  }, []);
+    // https://jsonplaceholder.typicode.com/users/1
+    const fetchData = () => {
+      let user = [];
+      fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
+        .then((response) => response.json())
+        .then((json) => {
+          user.push(json);
+          setUsers(user);
+        });
+    };
+    fetchData();
+  }, [id]);
+
   // get one user data
   const userInfo = users.filter((user) => user.id === parseInt(id));
   return (
