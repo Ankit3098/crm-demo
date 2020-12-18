@@ -1,40 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import { Button } from "reactstrap";
 import AddUserModal from "../components/AddUserModal";
 import Users from "../components/Users";
+import { fakeAuth } from "../util/fakeAuth";
+
 const Dashboard = () => {
-  const [users, setUsers] = useState([]);
   const [modal, setModal] = useState(false);
-  const [inputUser, setInputUser] = useState({
-    id: Math.ceil(Math.random() * 1000),
-    name: "",
-    email: "",
-  });
-  // get the data from local json file
-  useEffect(() => {
-    const fetchData = () => {
-      fetch("https://jsonplaceholder.typicode.com/users")
-        .then((response) => response.json())
-        .then((json) => setUsers(json));
-    };
-    fetchData();
-  }, []);
-  // update the state
-  const handleChange = (e) => {
-    setInputUser({ ...inputUser, [e.target.name]: e.target.value });
-  };
-  // delete user
-  const handleDelete = (id) => {
-    setUsers((oldUsers) => {
-      return oldUsers.filter((user) => user.id !== id);
+  const history = useHistory();
+
+  const handleClick = () => {
+    fakeAuth.signout(() => {
+      history.push("/login");
     });
   };
-  // add user
-  const handleAddUser = () => {
-    setUsers(users.concat(inputUser));
-    setModal(false);
-  };
-  // open and close modal
+
   const toggle = () => setModal(!modal);
   return (
     <div className="dashboard">
@@ -42,19 +22,13 @@ const Dashboard = () => {
         <Button color="primary" className="m-3" onClick={toggle}>
           Add User
         </Button>
-        <AddUserModal
-          inputUser={inputUser}
-          handleClick={handleAddUser}
-          handleChange={handleChange}
-          modal={modal}
-          toggle={toggle}
-        />
+        <Button color="danger" className="mt-3 mb-3" onClick={handleClick}>
+          Logout
+        </Button>
+        <AddUserModal modal={modal} toggle={toggle} />
       </div>
       <div className="display__user">
-        {users &&
-          users.map((user) => (
-            <Users key={user.id} handleDelete={handleDelete} user={user} />
-          ))}
+        <Users />
       </div>
     </div>
   );

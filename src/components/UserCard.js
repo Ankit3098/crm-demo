@@ -1,8 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { Button, Card, CardBody, CardText, CardTitle } from "reactstrap";
+import { userDeleted } from "../redux/usersSlice";
 
 const UserCard = (props) => {
+  const dispatch = useDispatch();
   return (
     <>
       <Card>
@@ -12,7 +15,7 @@ const UserCard = (props) => {
           {props.handleDelete && (
             <Button
               color="danger"
-              onClick={() => props.handleDelete(props.user.id)}
+              onClick={() => dispatch(userDeleted(props.user.id))}
             >
               {props.btnName}
             </Button>

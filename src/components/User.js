@@ -1,30 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-
+import React from "react";
+import { useSelector } from "react-redux";
+import { selectUserById } from "../redux/usersSlice";
 import UserCard from "./UserCard";
 
-const User = () => {
-  const [users, setUsers] = useState([]);
-  const { id } = useParams();
-  useEffect(() => {
-    // https://jsonplaceholder.typicode.com/users/1
-    const fetchData = () => {
-      let user = [];
-      fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
-        .then((response) => response.json())
-        .then((json) => {
-          user.push(json);
-          setUsers(user);
-        });
-    };
-    fetchData();
-  }, [id]);
+const User = ({ match }) => {
+  const { id } = match.params;
 
   // get one user data
-  const userInfo = users.filter((user) => user.id === parseInt(id));
+
+  const userInfo = useSelector((state) => selectUserById(state, parseInt(id)));
+
   return (
     <div className="user">
-      {userInfo[0] && <UserCard user={userInfo[0]} to="/dashboard" />}
+      {userInfo && <UserCard user={userInfo} to="/dashboard" />}
     </div>
   );
 };

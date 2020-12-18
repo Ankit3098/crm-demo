@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Button, Col, Form, FormGroup, Input, Label } from "reactstrap";
+import { fakeAuth } from "../util/fakeAuth";
 
 const Login = () => {
+  const history = useHistory();
   // set login user state
   const [user, setUser] = useState({
     email: "",
@@ -18,6 +20,9 @@ const Login = () => {
   // for submit submit user
   const handleClick = () => {
     console.log(user);
+    fakeAuth.signin(() => {
+      history.push("/dashboard");
+    });
     // add history router hook for after successfull login user redirect to dashboard and remove link from the Button tag
   };
   return (

@@ -1,16 +1,24 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { selectAllUsers } from "../redux/usersSlice";
 import UserCard from "./UserCard";
 
-const Users = ({ user, handleDelete }) => {
+const Users = () => {
+  const users = useSelector(selectAllUsers);
+
   return (
     <div className="users">
-      <UserCard
-        user={user}
-        to={`/users/${user.id}`}
-        handleDelete={handleDelete}
-        btnName="Delete User"
-        showUser="Show User"
-      />
+      {users &&
+        users.map((user) => (
+          <UserCard
+            key={user.id}
+            user={user}
+            to={`/users/${user.id}`}
+            handleDelete
+            btnName="Delete User"
+            showUser="Show User"
+          />
+        ))}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
   Form,
@@ -10,8 +10,35 @@ import {
   ModalFooter,
   ModalHeader,
 } from "reactstrap";
+import { useDispatch } from "react-redux";
+import { addUser } from "../redux/usersSlice";
 
 const AddUserModal = (props) => {
+  const [inputUser, setInputUser] = useState({
+    name: "",
+    email: "",
+  });
+
+  const dispatch = useDispatch();
+
+  const handleChange = (e) => {
+    setInputUser({ ...inputUser, [e.target.name]: e.target.value });
+  };
+
+  const handleAddUser = () => {
+    dispatch(
+      addUser({
+        id: Math.ceil(Math.random() * 1000),
+        ...inputUser,
+      })
+    );
+    props.toggle();
+    setInputUser({
+      name: "",
+      email: "",
+    });
+  };
+
   return (
     <>
       <Modal isOpen={props.modal} toggle={props.toggle}>
@@ -21,29 +48,29 @@ const AddUserModal = (props) => {
             <FormGroup>
               <Label htmlFor="name">Name</Label>
               <Input
-                value={props.inputUser.naem}
+                value={inputUser.name}
                 type="name"
                 name="name"
                 id="name"
                 placeholder="Enter User Name"
-                onChange={props.handleChange}
+                onChange={handleChange}
               />
             </FormGroup>
             <FormGroup>
               <Label htmlFor="email">email</Label>
               <Input
-                value={props.inputUser.email}
+                value={inputUser.email}
                 type="email"
                 name="email"
                 id="email"
                 placeholder="Enter User Email"
-                onChange={props.handleChange}
+                onChange={handleChange}
               />
             </FormGroup>
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={props.handleClick}>
+          <Button color="primary" onClick={handleAddUser}>
             Add User
           </Button>
           <Button color="secondary" onClick={props.toggle}>
