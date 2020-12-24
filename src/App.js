@@ -1,5 +1,5 @@
 import { Suspense, lazy } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import "./App.css";
 // import Dashboard from "./pages/dashboard";
 import Login from "./pages/login";
@@ -18,7 +18,7 @@ function App() {
       <Suspense fallback={<p>Loading...</p>}>
         <Navbar />
         <Switch>
-          <Route exact path="/login" component={Login} />
+          <Route exact path="/login" render={() => <Login />} />
           <Route exact path="/signup" component={Signup} />
           <ProtectedRoute exact path="/dashboard" component={Dashboard} />
           <Route exact path="/users/:id" component={User} />

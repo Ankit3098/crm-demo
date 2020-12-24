@@ -1,77 +1,41 @@
-import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-import { Button, Col, Form, FormGroup, Input, Label } from "reactstrap";
+import React from "react";
+import { useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectAllUsers } from "../redux/usersSlice";
+import RenderLoginForm from "../components/RenderLoginForm";
 import { fakeAuth } from "../util/fakeAuth";
+import { SubmissionError } from "redux-form";
 
-const Login = () => {
+const Login = (props) => {
   const history = useHistory();
-  // set login user state
-  const [user, setUser] = useState({
-    email: "",
-    password: "",
-  });
+  const users = useSelector(selectAllUsers);
+  const emails = users.map((user) => user.email);
 
-  // handle for input change
-  const handleChange = (e) => {
-    e.preventDefault();
-    setUser({ ...user, [e.target.name]: e.target.value });
-  };
-
-  // for submit submit user
-  const handleClick = () => {
-    console.log(user);
-    fakeAuth.signin(() => {
-      history.push("/dashboard");
-    });
-    // add history router hook for after successfull login user redirect to dashboard and remove link from the Button tag
+  const handleLoginValues = (values) => {
+    // validation for login email
+    if (!emails.includes(values.email)) {
+      throw new SubmissionError({
+        email: "Email does not exist",
+        _error: "Login failed!",
+      });
+    } else {
+      fakeAuth.signin(() => {
+        history.push("/dashboard");
+      });
+    }
   };
   return (
     <div className="login">
       <h1>Login Form</h1>
-      <Form>
-        <FormGroup className="mr-sm-2 m-2" row>
-          <Label htmlFor="eamil" sm={{ size: 1, offset: 1 }}>
-            Email
-          </Label>
-          <Col sm={6}>
-            <Input
-              type="email"
-              name="email"
-              id="eamil"
-              placeholder="Enter your Email"
-              onChange={handleChange}
-            />
-          </Col>
-        </FormGroup>
-        <FormGroup className="mr-sm-2 m-2" row>
-          <Label htmlFor="password" sm={{ size: 1, offset: 1 }}>
-            Password
-          </Label>
-          <Col sm={6}>
-            <Input
-              type="password"
-              name="password"
-              id="password"
-              placeholder="Enter your password"
-              onChange={handleChange}
-            />
-          </Col>
-        </FormGroup>
-        <FormGroup className="mt-3 ml-2">
-          <Col sm={{ size: 1, offset: 2 }}>
-            <Link to="/dashboard">
-              <Button type="sumbit" color="primary" onClick={handleClick}>
-                Login
-              </Button>
-            </Link>
-          </Col>
-        </FormGroup>
-      </Form>
-      <Col sm={{ offset: 2 }}>
-        <p>
-          Don't have an account? Signup <Link to="/signup">here!</Link>
-        </p>
-      </Col>
+      <RenderLoginForm onSubmit={handleLoginValues} />
+      <div className="login__emails">
+        <h4>Try login with these email ids</h4>
+        <ul>
+          {emails.map((email, index) => (
+            <li key={index}>{email}</li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
